@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onSubmitted: (String str){
                   setState(() {
                     result = str;
-                    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: str)));
+                    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: "flour,sugar,apple")));
                   });
                 },
               ),
