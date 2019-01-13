@@ -20,7 +20,7 @@ class ProfileCardDraggable extends StatelessWidget
         [
           new Expanded
           (
-            child: new Image.asset(filtered[cardNum]["image"], fit: BoxFit.cover),
+            child: new Image.network(filtered[cardNum]["image"], fit: BoxFit.cover),
           ),
           new Container
           (

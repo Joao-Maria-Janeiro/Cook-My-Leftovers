@@ -21,7 +21,7 @@ class ProfileCardAlignment extends StatelessWidget
             child: new Material
             (
               borderRadius: new BorderRadius.circular(12.0),
-              child: new Image.asset(filtered[cardNum]["image"], fit: BoxFit.cover),
+              child: new Image.network(filtered[cardNum]["image"], fit: BoxFit.cover),
             ),
           ),
           new SizedBox.expand

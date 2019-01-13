@@ -94,7 +94,7 @@ class _CardsSectionState extends State<CardsSectionAlignment> with SingleTickerP
               onPanEnd: (_)
               {
                 // If the front card was swiped far enough to count as swiped
-                if(frontCardAlign.x > 3.0 || frontCardAlign.x < -3.0)
+                if(frontCardAlign.x > 2.8 || frontCardAlign.x < -2.8)
                 {
                   animateCards();
                 }
