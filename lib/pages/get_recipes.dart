@@ -25,7 +25,6 @@ class RecipesStageState extends State<RecipesStage> {
     setState(() {
       var resBody = json.decode(res.body);
       data = resBody;
-      print(data);
       filterData();
     });
 

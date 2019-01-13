@@ -39,10 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _ingredients = new List.generate(_count, (int i) => new IngredientColumn());
-
+    if(_count == 0){
+      _count++;
+    }
     return Scaffold(
       key: mainKey,
-      appBar: AppBar(title: Text("Form Example")),
+      appBar: AppBar(title: Text("Cook My Leftovers")),
       body: Padding(
           padding: EdgeInsets.all(10.0),
           child:  Form(
@@ -82,16 +84,19 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
       });
 
+      result = result.substring(1, result.length);
+
       var snackbar = SnackBar(
         content:
-        Text('Ingredients: $result'),
+        Text('Username: $result'),
         duration: Duration(milliseconds: 5000),
       );
 
       mainKey.currentState.showSnackBar(snackbar);
 
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: "flour,sugar,apple")));
-
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: result)));
+      result = "";
+      _count = 0;
     }
   }
 
@@ -123,7 +128,7 @@ class _IngredientColumn extends State<IngredientColumn> {
             decoration: InputDecoration(
               labelText: "Ingredient:",
             ),
-            onSaved: (str) => _count == 1 ? result = str : result += "," + str,
+            onSaved: (str) => result += "," + str,
           ),
         ]));
   }
