@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.amberAccent,
                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4.0)),
                 elevation: 6.0,
-                onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: result))),
+                onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: "flour,sugar,apple"))),
                 child: new Text("Check For Recipes"),
               ),
             ],
