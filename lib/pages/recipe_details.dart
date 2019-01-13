@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../keys.dart' as keys;
 
 class RecipeDetails extends StatefulWidget {
   final int id;
@@ -16,7 +17,7 @@ class RecipeDetailsState extends State<RecipeDetails> {
   Map data;
 
   Future<String> getData() async {
-    var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + (widget.id).toString() + "/information"), headers: {"Accept": "application/json", "X-RapidAPI-Key": "07cb41b3e9msh6fc7b2c9f455f3fp1ac9f3jsn9a525aa340d5"});
+    var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + (widget.id).toString() + "/information"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
 
     setState(() {
       var resBody = json.decode(res.body);

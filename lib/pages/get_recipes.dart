@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'recipe_details.dart';
+import '../keys.dart' as keys;
 
 class RecipesStage extends StatefulWidget {
 
@@ -20,7 +21,7 @@ class RecipesStageState extends State<RecipesStage> {
   List filtered = new List();
 
   Future<String> getData() async {
-    var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + widget.ingredients), headers: {"Accept": "application/json", "X-RapidAPI-Key": "07cb41b3e9msh6fc7b2c9f455f3fp1ac9f3jsn9a525aa340d5"});
+    var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + widget.ingredients), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
     setState(() {
       var resBody = json.decode(res.body);
       data = resBody;
@@ -71,14 +72,6 @@ class RecipesStageState extends State<RecipesStage> {
                               children: <Widget>[
                                 Text("Name: "),
                                 Text(filtered[index]["title"],
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
-                                Text("Owned Ingredients: "),
-                                Text((filtered[index]["usedIngredientCount"]).toString(),
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
-                                Text("Missing ingredients: "),
-                                Text((filtered[index]["missedIngredientCount"]).toString(),
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
