@@ -61,17 +61,17 @@ class RecipeDetailsState extends State<RecipeDetails> {
                             child: Column(
                               children: <Widget>[
                                 Text("Name: "),
-                                Text(data["title"].toString(),
+                                Text(data["title"].toString() + "\n",
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Text("Cooking Time: "),
-                                Text(data["readyInMinutes"].toString() + " minutes",
+                                Text(data["readyInMinutes"].toString() + " minutes\n",
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
                                   data["image"],
                                 ),
-                                Text("Intructions: "),
+                                Text("\n" + "Intructions: "),
                                 Text(data["instructions"].toString().replaceAll("  ", "\n"),
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
