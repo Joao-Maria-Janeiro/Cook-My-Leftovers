@@ -93,8 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
       mainKey.currentState.showSnackBar(snackbar);
+      String buff = result;
 
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: result)));
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: buff)));
+      
       result = "";
       _count = 0;
     }
@@ -120,19 +122,19 @@ class _IngredientColumn extends State<IngredientColumn> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-        width: 170.0,
-        padding: new EdgeInsets.all(5.0),
-        child: new Column(children: <Widget>[
-          TextFormField(
-            autocorrect: false,
-            decoration: InputDecoration(
-              labelText: "Ingredient:",
-            ),
-            onSaved: (str) => result += "," + str,
+      width: 170.0,
+      padding: new EdgeInsets.all(5.0),
+      child: new Column(children: <Widget>[
+        TextFormField(
+          autocorrect: false,
+          decoration: InputDecoration(
+            labelText: "Ingredient:",
           ),
-        ]));
+          onSaved: (str) => result += "," + str,
+        ),
+      ])
+    );
   }
-
 
 }
 
