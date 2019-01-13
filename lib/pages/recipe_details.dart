@@ -68,12 +68,16 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Text("Cooking Time: "),
-                                Text(data1[data[26]].toString(),
+                                Text(data1[data[26]].toString() + " minutes",
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
                                   data1[data[28]],
-                                )
+                                ),
+                                Text("Intructions: "),
+                                Text(data1[data[35]].toString().replaceAll("  ", "\n"),
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.black87)),
                               ],
                             ),
                           ),
