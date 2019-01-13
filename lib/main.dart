@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               new TextField(
                 decoration: new InputDecoration(
-                  hintText: "Write your ingredients here"
+                    hintText: "Write your ingredients here"
                 ),
                 onSubmitted: (String str){
                   setState(() {
@@ -104,10 +104,10 @@ class _IngredientColumn extends State<IngredientColumn> {
               labelText: 'Ingredient',
             ),
             onSubmitted: (String str){
-            setState(() {
-              //result = result + str;
-            });
-          },
+              setState(() {
+                //result = result + str;
+              });
+            },
           ),
         ]));
   }
