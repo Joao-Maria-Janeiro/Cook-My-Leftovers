@@ -17,16 +17,25 @@ class RecipesStage extends StatefulWidget {
 
 class RecipesStageState extends State<RecipesStage> {
   List data;
+  List filtered = new List();
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + widget.ingredients), headers: {"Accept": "application/json", "X-RapidAPI-Key": "07cb41b3e9msh6fc7b2c9f455f3fp1ac9f3jsn9a525aa340d5"});
     setState(() {
       var resBody = json.decode(res.body);
       data = resBody;
-      print(data);
+      filterData();
     });
 
     return "SUCCESS";
+  }
+
+  void filterData(){
+    for (var i = 0; i < data.length; i++){
+      if(data[i]["missedIngredientCount"] == 0){
+        filtered.add(data[i]);
+      }
+    }
   }
 
   @override
@@ -47,7 +56,7 @@ class RecipesStageState extends State<RecipesStage> {
           title: new Text("Available Recipes"),
         ),
         body: ListView.builder(
-          itemCount: data == null ? 0 : data.length,
+          itemCount: filtered == null ? 0 : filtered.length,
           itemBuilder: (BuildContext context, int index){
             return new Container(
               child: Center(
@@ -57,23 +66,23 @@ class RecipesStageState extends State<RecipesStage> {
                     Card(
                       child: Container(
                         child: new InkWell(
-                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: data[index]["id"]))),
+                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
                             child: Column(
                               children: <Widget>[
                                 Text("Name: "),
-                                Text(data[index]["title"],
+                                Text(filtered[index]["title"],
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Text("Owned Ingredients: "),
-                                Text((data[index]["usedIngredientCount"]).toString(),
+                                Text((filtered[index]["usedIngredientCount"]).toString(),
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Text("Missing ingredients: "),
-                                Text((data[index]["missedIngredientCount"]).toString(),
+                                Text((filtered[index]["missedIngredientCount"]).toString(),
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
-                                  data[index]["image"],
+                                  filtered[index]["image"],
                                 )
                               ],
                             )),
