@@ -4,7 +4,8 @@ class ProfileCardDraggable extends StatelessWidget
 {
   final int cardNum;
   List filtered;
-  ProfileCardDraggable(this.cardNum, this.filtered);
+  int numRecipes;
+  ProfileCardDraggable(this.cardNum, this.filtered, this.numRecipes);
 
   @override
   Widget build(BuildContext context)
@@ -19,7 +20,7 @@ class ProfileCardDraggable extends StatelessWidget
         [
           new Expanded
           (
-            child: new Image.asset('res/portrait.jpeg', fit: BoxFit.cover),
+            child: new Image.asset(filtered[cardNum]["image"], fit: BoxFit.cover),
           ),
           new Container
           (
@@ -29,7 +30,7 @@ class ProfileCardDraggable extends StatelessWidget
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>
               [
-                new Text("Recipe Title", style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700)),
+                new Text(filtered[cardNum]["title"], style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700)),
                 new Padding(padding: new EdgeInsets.only(bottom: 8.0)),
                 new Text('A short description.', textAlign: TextAlign.start),
               ],

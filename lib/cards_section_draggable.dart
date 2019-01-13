@@ -4,10 +4,12 @@ import 'profile_card_draggable.dart';
 class CardsSectionDraggable extends StatefulWidget
 {
   List filtered;
+  int numRecipes;
 
-  CardsSectionDraggable(List filtered)
+  CardsSectionDraggable(List filtered, int numRecipes)
   {
     this.filtered = filtered;
+    this.numRecipes = numRecipes;
   }
 
   @override
@@ -27,7 +29,7 @@ class _CardsSectionState extends State<CardsSectionDraggable>
 
     for (cardsCounter = 0; cardsCounter < 3; cardsCounter++)
     {
-      cards.add(new ProfileCardDraggable(cardsCounter, widget.filtered));
+      cards.add(new ProfileCardDraggable(cardsCounter, widget.filtered, widget.numRecipes));
     }
   }
 
@@ -104,13 +106,16 @@ class _CardsSectionState extends State<CardsSectionDraggable>
     setState(()
     {
       // Swap cards
-      var temp = cards[0];
-      cards[0] = cards[1];
-      cards[1] = cards[2];
-      cards[2] = temp;
+      if(cardsCounter < widget.numRecipes) {
+        var temp = cards[0];
+        cards[0] = cards[1];
+        cards[1] = cards[2];
+        cards[2] = temp;
 
-      cards[2] = new ProfileCardDraggable(cardsCounter, widget.filtered);
-      cardsCounter++;
+        cards[2] = new ProfileCardDraggable(
+            cardsCounter, widget.filtered, widget.numRecipes);
+        cardsCounter++;
+      }
     });
   }
 

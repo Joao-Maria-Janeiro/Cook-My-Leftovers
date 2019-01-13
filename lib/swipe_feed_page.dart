@@ -79,7 +79,7 @@ class _SwipeFeedPageState extends State<SwipeFeedPage>
       (
         children: <Widget>
         [
-          showAlignmentCards ? new CardsSectionAlignment(context, filtered) : new CardsSectionDraggable(filtered),
+          showAlignmentCards ? new CardsSectionAlignment(context, filtered, filtered.length) : new CardsSectionDraggable(filtered, filtered.length),
           //buttonsRow(),
         ],
       ),

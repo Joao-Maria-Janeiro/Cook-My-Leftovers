@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 import 'profile_card_alignment.dart';
 import 'dart:math';
 
@@ -8,10 +8,12 @@ List<Size> cardsSize = new List(3);
 class CardsSectionAlignment extends StatefulWidget
 {
   List filtered;
+  int numRecipes;
 
-  CardsSectionAlignment(BuildContext context, List filtered)
+  CardsSectionAlignment(BuildContext context, List filtered, int numRecipes)
   {
     this.filtered = filtered;
+    this.numRecipes = numRecipes;
     cardsSize[0] = new Size(MediaQuery.of(context).size.width * 0.9, MediaQuery.of(context).size.height * 0.6);
     cardsSize[1] = new Size(MediaQuery.of(context).size.width * 0.85, MediaQuery.of(context).size.height * 0.58);
     cardsSize[2] = new Size(MediaQuery.of(context).size.width * 0.8, MediaQuery.of(context).size.height * 0.55);
@@ -40,7 +42,7 @@ class _CardsSectionState extends State<CardsSectionAlignment> with SingleTickerP
     // Init cards
     for (cardsCounter = 0; cardsCounter < 3; cardsCounter++)
     {
-      cards.add(new ProfileCardAlignment(cardsCounter, widget.filtered));
+      cards.add(new ProfileCardAlignment(cardsCounter, widget.filtered, widget.numRecipes));
     }
 
     frontCardAlign = cardsAlign[2];
@@ -160,17 +162,20 @@ class _CardsSectionState extends State<CardsSectionAlignment> with SingleTickerP
   {
     setState(()
     {
-      // Swap cards (back card becomes the middle card; middle card becomes the front card, front card becomes a new bottom card)
-      var temp = cards[0];
-      cards[0] = cards[1];
-      cards[1] = cards[2];
-      cards[2] = temp;
+      if(cardsCounter < widget.numRecipes) {
+        // Swap cards (back card becomes the middle card; middle card becomes the front card, front card becomes a new bottom card)
+        var temp = cards[0];
+        cards[0] = cards[1];
+        cards[1] = cards[2];
+        cards[2] = temp;
 
-      cards[2] = new ProfileCardAlignment(cardsCounter, widget.filtered);
-      cardsCounter++;
+        cards[2] = new ProfileCardAlignment(
+            cardsCounter, widget.filtered, widget.numRecipes);
+        cardsCounter++;
 
-      frontCardAlign = defaultFrontCardAlign;
-      frontCardRot = 0.0;
+        frontCardAlign = defaultFrontCardAlign;
+        frontCardRot = 0.0;
+      }
     });
   }
 

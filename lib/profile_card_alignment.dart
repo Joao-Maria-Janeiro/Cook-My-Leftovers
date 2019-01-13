@@ -4,7 +4,8 @@ class ProfileCardAlignment extends StatelessWidget
 {
   final int cardNum;
   List filtered;
-  ProfileCardAlignment(this.cardNum, this.filtered);
+  int numRecipes;
+  ProfileCardAlignment(this.cardNum, this.filtered, this.numRecipes);
 
   @override
   Widget build(BuildContext context)
@@ -20,7 +21,7 @@ class ProfileCardAlignment extends StatelessWidget
             child: new Material
             (
               borderRadius: new BorderRadius.circular(12.0),
-              child: new Image.asset('res/portrait.jpeg', fit: BoxFit.cover),
+              child: new Image.asset(filtered[cardNum]["image"], fit: BoxFit.cover),
             ),
           ),
           new SizedBox.expand
@@ -50,7 +51,7 @@ class ProfileCardAlignment extends StatelessWidget
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>
                 [
-                  new Text(filtered[0]["text"], style: new TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w700)),
+                  new Text(filtered[cardNum]["title"], style: new TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w700)),
                   new Padding(padding: new EdgeInsets.only(bottom: 8.0)),
                   new Text('A short description.', textAlign: TextAlign.start, style: new TextStyle(color: Colors.white)),
                 ],
