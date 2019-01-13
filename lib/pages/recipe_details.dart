@@ -13,17 +13,14 @@ class RecipeDetails extends StatefulWidget {
 }
 
 class RecipeDetailsState extends State<RecipeDetails> {
-  Map data1;
-  List data;
+  Map data;
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + (widget.id).toString() + "/information"), headers: {"Accept": "application/json", "X-RapidAPI-Key": "07cb41b3e9msh6fc7b2c9f455f3fp1ac9f3jsn9a525aa340d5"});
 
     setState(() {
       var resBody = json.decode(res.body);
-      data1 = resBody;
-      data = data1.keys.toList();
-      print(data);
+      data = resBody;
     });
 
     return "SUCCESS";
@@ -64,18 +61,18 @@ class RecipeDetailsState extends State<RecipeDetails> {
                             child: Column(
                               children: <Widget>[
                                 Text("Name: "),
-                                Text(data1[data[25]].toString(),
+                                Text(data["title"].toString() + "\n",
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Text("Cooking Time: "),
-                                Text(data1[data[26]].toString() + " minutes",
+                                Text(data["readyInMinutes"].toString() + " minutes\n",
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
-                                  data1[data[28]],
+                                  data["image"],
                                 ),
-                                Text("Intructions: "),
-                                Text(data1[data[35]].toString().replaceAll("  ", "\n"),
+                                Text("\n" + "Intructions: "),
+                                Text(data["instructions"].toString().replaceAll("  ", "\n"),
                                     style: TextStyle(
                                         fontSize: 18.0, color: Colors.black87)),
                               ],
