@@ -1,3 +1,4 @@
+import 'package:cook_my_leftovers/swipe_feed_page.dart';
 import 'package:flutter/material.dart';
 import './pages/get_recipes.dart';
 
@@ -95,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
       mainKey.currentState.showSnackBar(snackbar);
       String buff = result;
 
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: buff)));
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SwipeFeedPage(ingredients: buff)));
       
       result = "";
       _count = 0;
