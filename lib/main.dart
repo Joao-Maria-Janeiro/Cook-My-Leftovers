@@ -118,15 +118,18 @@ class IngredientColumn extends StatefulWidget {
 }
 
 class _IngredientColumn extends State<IngredientColumn> {
-
+  FocusNode nodeTwo = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(nodeTwo);
     return new Container(
       width: 170.0,
       padding: new EdgeInsets.all(5.0),
       child: new Column(children: <Widget>[
         TextFormField(
+          focusNode: nodeTwo,
           autocorrect: false,
           decoration: InputDecoration(
             labelText: "Ingredient:",
