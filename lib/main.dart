@@ -1,6 +1,7 @@
 import 'package:cook_my_leftovers/swipe_feed_page.dart';
 import 'package:flutter/material.dart';
 import './pages/get_recipes.dart';
+import './pages/saved_recipes.dart';
 
 String result = "";
 int _count = 1;
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        cursorColor: Colors.amberAccent,
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Cook My Leftovers'),
@@ -45,7 +47,24 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return Scaffold(
       key: mainKey,
-      appBar: AppBar(title: Text("Cook My Leftovers")),
+      appBar: AppBar(
+          title: Text(
+              widget.title,
+              style: TextStyle(
+              color: Colors.amberAccent)
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              color: Colors.amberAccent,
+              tooltip: 'Your saved recipes',
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+            ),
+          ],
+      ),
       body: Padding(
           padding: EdgeInsets.all(10.0),
           child:  Form(
@@ -87,16 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       result = result.substring(1, result.length);
 
-      var snackbar = SnackBar(
-        content:
-        Text('Username: $result'),
-        duration: Duration(milliseconds: 5000),
-      );
-
-      mainKey.currentState.showSnackBar(snackbar);
       String buff = result;
 
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SwipeFeedPage(ingredients: buff)));
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: buff)));
       
       result = "";
       _count = 0;
@@ -133,6 +145,13 @@ class _IngredientColumn extends State<IngredientColumn> {
           autocorrect: false,
           decoration: InputDecoration(
             labelText: "Ingredient:",
+            labelStyle: new TextStyle(
+              color: Colors.amberAccent
+            ),
+            hintText: "Write you ingredient here",
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.amberAccent)
+            )
           ),
           onSaved: (str) => result += "," + str,
         ),

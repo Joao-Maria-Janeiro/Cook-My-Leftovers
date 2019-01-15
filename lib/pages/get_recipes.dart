@@ -53,42 +53,81 @@ class RecipesStageState extends State<RecipesStage> {
 
   @override
   Widget build(BuildContext context) {
-      return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Available Recipes"),
-        ),
-        body: ListView.builder(
-          itemCount: filtered == null ? 0 : filtered.length,
-          itemBuilder: (BuildContext context, int index){
-            return new Container(
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Card(
-                      child: Container(
-                        child: new InkWell(
-                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
-                            child: Column(
-                              children: <Widget>[
-                                Text("Name: "),
-                                Text(filtered[index]["title"],
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
-                                Image.network(
-                                  filtered[index]["image"],
-                                )
-                              ],
-                            )),
+      if(filtered.length != 0){
+        return new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Available Recipes"),
+          ),
+          body: ListView.builder(
+            itemCount: filtered == null ? 0 : filtered.length,
+            itemBuilder: (BuildContext context, int index){
+              return new Container(
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Card(
+                        child: Container(
+                          child: new InkWell(
+                              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
+                              child: Column(
+                                children: <Widget>[
+                                  Text("Name: "),
+                                  Text(filtered[index]["title"],
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.black87)),
+                                  Image.network(
+                                    filtered[index]["image"],
+                                  )
+                                ],
+                              )),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+              );
+            },
+          ),
+        );
+      }else{
+        return new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Available Recipes"),
+          ),
+          body: new Container(
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Text("No recipes match your ingredients, would you like other recipes with more ingredients? "),
+                  new ButtonTheme.bar(
+                    child: new ButtonBar(
+                      alignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new RaisedButton(
+                          onPressed: () => setState(() { filtered.addAll(data); }),
+                          child: new Text("Yes"),
+                          color: Colors.amberAccent,
+                        ),
+                        new RaisedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: new Text("No"),
+                          color: Colors.amberAccent,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            );
-          },
-        ),
-      );
+            ),
+          ),
+        );
+      }
+
     }
+
+
   }
+
+
 
