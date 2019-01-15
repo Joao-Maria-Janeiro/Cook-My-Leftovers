@@ -8,6 +8,8 @@ import '../keys.dart' as keys;
 class RecipesStage extends StatefulWidget {
 
   final String ingredients;
+  static final now = new DateTime.now();
+  static final seconds3 = now.add(new Duration(seconds: 3));
 
   const RecipesStage({Key key, this.ingredients}) : super(key: key);
 
@@ -19,6 +21,7 @@ class RecipesStage extends StatefulWidget {
 class RecipesStageState extends State<RecipesStage> {
   List data;
   List filtered = new List();
+  bool _waiting = true;
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + widget.ingredients), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -51,9 +54,22 @@ class RecipesStageState extends State<RecipesStage> {
     super.dispose();
   }
 
+  void _submit() {
+    setState(() {
+      _waiting = true;
+    });
+
+    //Simulate a service call
+    new Future.delayed(new Duration(seconds: 4), () {
+      setState(() {
+        _waiting = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-      if(filtered.length != 0){
+    if(filtered.length != 0){
         return new Scaffold(
           appBar: new AppBar(
             title: new Text("Available Recipes"),
@@ -91,13 +107,29 @@ class RecipesStageState extends State<RecipesStage> {
           ),
         );
       }else{
-        return new Scaffold(
-          appBar: new AppBar(
-            title: new Text("Available Recipes"),
-          ),
-          body: new Container(
-            child: Center(
-              child: Column(
+        //print("###" + updatedTime.difference(RecipesStage.seconds3).inSeconds.toString());
+        if(_waiting) {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text("Available Recipes"),
+            ),
+            body: new Container(
+              child: Center(
+                  child: new CircularProgressIndicator(
+                    value: null,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  )
+              ),
+            ),
+          );
+        }else {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text("Available Recipes"),
+            ),
+            body: new Container(
+              child: Center(
+                child: Column(
                 children: <Widget>[
                   Text("No recipes match your ingredients, would you like other recipes with more ingredients? "),
                   new ButtonTheme.bar(
@@ -119,9 +151,11 @@ class RecipesStageState extends State<RecipesStage> {
                   ),
                 ],
               ),
+              ),
             ),
-          ),
-        );
+          );
+        }
+
       }
 
     }
