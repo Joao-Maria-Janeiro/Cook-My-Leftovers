@@ -41,6 +41,7 @@ class RecipesStageState extends State<RecipesStage> {
         filtered.add(data[i]);
       }
     }
+    _waiting = false;
   }
 
   @override
@@ -54,18 +55,6 @@ class RecipesStageState extends State<RecipesStage> {
     super.dispose();
   }
 
-  void _submit() {
-    setState(() {
-      _waiting = true;
-    });
-
-    //Simulate a service call
-    new Future.delayed(new Duration(seconds: 4), () {
-      setState(() {
-        _waiting = false;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +96,6 @@ class RecipesStageState extends State<RecipesStage> {
           ),
         );
       }else{
-        //print("###" + updatedTime.difference(RecipesStage.seconds3).inSeconds.toString());
         if(_waiting) {
           return new Scaffold(
             appBar: new AppBar(
@@ -117,7 +105,7 @@ class RecipesStageState extends State<RecipesStage> {
               child: Center(
                   child: new CircularProgressIndicator(
                     value: null,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
                   )
               ),
             ),
