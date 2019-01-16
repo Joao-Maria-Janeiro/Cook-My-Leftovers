@@ -22,6 +22,7 @@ class RecipeDetailsState extends State<RecipeDetails> {
     setState(() {
       var resBody = json.decode(res.body);
       data = resBody;
+      print(data["extendedIngredients"]);
     });
 
     return "SUCCESS";
@@ -71,6 +72,24 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                         fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
                                   data["image"],
+                                ),
+                                Text("Ingredients: \n"),
+                                Container(
+                                  height: data["extendedIngredients"].length * 25.0,
+                                  child: ListView.builder(
+                                    itemCount: data["extendedIngredients"] == null ? 0 : data["extendedIngredients"].length,
+                                    itemBuilder: (BuildContext context, int index){
+                                      return new Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(data["extendedIngredients"][index]["name"],
+                                                style: TextStyle(
+                                                    fontSize: 18.0, color: Colors.black87)),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                                 Text("\n" + "Intructions: "),
                                 Text(data["instructions"].toString().replaceAll("  ", "\n"),
