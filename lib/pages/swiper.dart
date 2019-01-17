@@ -5,18 +5,18 @@ import 'dart:convert';
 import 'recipe_details.dart';
 import '../keys.dart' as keys;
 
-class RecipesStage extends StatefulWidget {
+class SwiperStage extends StatefulWidget {
 
   final String ingredients;
 
-  const RecipesStage({Key key, this.ingredients}) : super(key: key);
+  const SwiperStage({Key key, this.ingredients}) : super(key: key);
 
   @override
-  State createState() => new RecipesStageState();
+  State createState() => new SwiperStageState();
 }
 
 
-class RecipesStageState extends State<RecipesStage> {
+class SwiperStageState extends State<SwiperStage> {
   List data;
   List filtered = new List();
 

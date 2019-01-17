@@ -41,6 +41,7 @@ class RecipesStageState extends State<RecipesStage> {
         filtered.add(data[i]);
       }
     }
+    filtered.sort((a, b) => b["likes"].compareTo(a["likes"]));
     _waiting = false;
   }
 
