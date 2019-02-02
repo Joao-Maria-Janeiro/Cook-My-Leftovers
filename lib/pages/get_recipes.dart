@@ -5,6 +5,9 @@ import 'dart:convert';
 import 'recipe_details.dart';
 import '../keys.dart' as keys;
 
+final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
+final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
+
 class RecipesStage extends StatefulWidget {
 
   final String ingredients;
@@ -41,7 +44,6 @@ class RecipesStageState extends State<RecipesStage> {
         filtered.add(data[i]);
       }
     }
-    filtered.sort((a, b) => b["likes"].compareTo(a["likes"]));
     _waiting = false;
   }
 
@@ -60,65 +62,74 @@ class RecipesStageState extends State<RecipesStage> {
   @override
   Widget build(BuildContext context) {
     if(filtered.length != 0){
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Recipes"),
+        ),
+        body: ListView.builder(
+          itemCount: filtered == null ? 0 : filtered.length,
+          itemBuilder: (BuildContext context, int index){
+            return new Container(
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Card(
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 4.0, right: 4.0),
+                        constraints: new BoxConstraints.expand(
+                          height: 200.0,
+                        ),
+                        child: new InkWell(
+                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
+                          child: Container(
+                            decoration: new BoxDecoration(
+                              image: new DecorationImage(image: new NetworkImage(filtered[index]["image"]),
+                                fit: BoxFit.cover,),
+                            ),
+                            child: new Container(
+                              margin: const EdgeInsets.only(top: 8.0, left: 10.0),
+                              child: new Text(filtered[index]["title"],
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,)),
+                            ),
+                          ),
+
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }else{
+      if(_waiting) {
         return new Scaffold(
           appBar: new AppBar(
             title: new Text("Available Recipes"),
           ),
-          body: ListView.builder(
-            itemCount: filtered == null ? 0 : filtered.length,
-            itemBuilder: (BuildContext context, int index){
-              return new Container(
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Card(
-                        child: Container(
-                          child: new InkWell(
-                              onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
-                              child: Column(
-                                children: <Widget>[
-                                  Text("Name: "),
-                                  Text(filtered[index]["title"],
-                                      style: TextStyle(
-                                          fontSize: 18.0, color: Colors.black87)),
-                                  Image.network(
-                                    filtered[index]["image"],
-                                  )
-                                ],
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
+          body: new Container(
+            child: Center(
+                child: new CircularProgressIndicator(
+                  value: null,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
+                )
+            ),
           ),
         );
-      }else{
-        if(_waiting) {
-          return new Scaffold(
-            appBar: new AppBar(
-              title: new Text("Available Recipes"),
-            ),
-            body: new Container(
-              child: Center(
-                  child: new CircularProgressIndicator(
-                    value: null,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
-                  )
-              ),
-            ),
-          );
-        }else {
-          return new Scaffold(
-            appBar: new AppBar(
-              title: new Text("Available Recipes"),
-            ),
-            body: new Container(
-              child: Center(
-                child: Column(
+      }else {
+        return new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Available Recipes"),
+          ),
+          body: new Container(
+            child: Center(
+              child: Column(
                 children: <Widget>[
                   Text("No recipes match your ingredients, would you like other recipes with more ingredients? "),
                   new ButtonTheme.bar(
@@ -140,17 +151,17 @@ class RecipesStageState extends State<RecipesStage> {
                   ),
                 ],
               ),
-              ),
             ),
-          );
-        }
-
+          ),
+        );
       }
 
     }
 
-
   }
+
+
+}
 
 
 

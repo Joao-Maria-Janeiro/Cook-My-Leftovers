@@ -6,6 +6,8 @@ import './pages/saved_recipes.dart';
 String result = "";
 int _count = 1;
 
+final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
+final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
 
 void main() => runApp(MyApp());
 
@@ -16,10 +18,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        cursorColor: Colors.amberAccent,
+        cursorColor: primaryColor,
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Cook My Leftovers'),
+      home: MyHomePage(title: 'What ingredients do you have?'),
     );
   }
 }
@@ -48,22 +50,22 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       key: mainKey,
       appBar: AppBar(
-          title: Text(
-              widget.title,
-              style: TextStyle(
-              color: Colors.amberAccent)
+        title: Text(
+            widget.title,
+            style: TextStyle(
+                color: Colors.amberAccent)
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            color: primaryColor,
+            tooltip: 'Your saved recipes',
+            onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
           ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              color: Colors.amberAccent,
-              tooltip: 'Your saved recipes',
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
-            ),
-          ],
+        ],
       ),
       body: Padding(
           padding: EdgeInsets.all(10.0),
@@ -71,11 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
             key: formKey,
             child: Column(
               children: <Widget>[
-                new Container(
-                  height: 200.0,
-                  child: new ListView(
-                    children: _ingredients,
-                    scrollDirection: Axis.vertical,
+                Expanded(
+                  flex: 7,
+                  child: new Container(
+                    //height: 200.0,
+                    child: new ListView(
+                      children: _ingredients,
+                      scrollDirection: Axis.vertical,
+                    ),
                   ),
                 ),
                 new FlatButton(
@@ -84,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 RaisedButton(
                   onPressed: onPressed,
-                  color: Colors.amberAccent,
+                  color: primaryColor,
                   shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4.0)),
                   elevation: 6.0,
                   child: new Text("Check For Recipes"),
@@ -92,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           )
-        ),
+      ),
     );
   }
 
@@ -109,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String buff = result;
 
       Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: buff)));
-      
+
       result = "";
       _count = 0;
     }
@@ -137,25 +142,25 @@ class _IngredientColumn extends State<IngredientColumn> {
     FocusScope.of(context).requestFocus(new FocusNode());
     FocusScope.of(context).requestFocus(nodeTwo);
     return new Container(
-      width: 170.0,
-      padding: new EdgeInsets.all(5.0),
-      child: new Column(children: <Widget>[
-        TextFormField(
-          focusNode: nodeTwo,
-          autocorrect: false,
-          decoration: InputDecoration(
-            labelText: "Ingredient:",
-            labelStyle: new TextStyle(
-              color: Colors.amberAccent
+        width: 170.0,
+        padding: new EdgeInsets.all(5.0),
+        child: new Column(children: <Widget>[
+          TextFormField(
+            focusNode: nodeTwo,
+            autocorrect: false,
+            decoration: InputDecoration(
+                labelText: "Ingredient:",
+                labelStyle: new TextStyle(
+                    color: primaryColor
+                ),
+                hintText: "Write you ingredient here",
+                border: new OutlineInputBorder(
+                  borderSide: new BorderSide(width: 1.0, color: Colors.white),
+                )
             ),
-            hintText: "Write you ingredient here",
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.amberAccent)
-            )
+            onSaved: (str) => result += "," + str,
           ),
-          onSaved: (str) => result += "," + str,
-        ),
-      ])
+        ])
     );
   }
 
