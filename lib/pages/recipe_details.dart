@@ -1,3 +1,4 @@
+import 'package:cook_my_leftovers/pages/saved_recipes.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -66,8 +67,22 @@ class RecipeDetailsState extends State<RecipeDetails> {
     return Scaffold(
       backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
       appBar: AppBar(
-        title: Text("Recipe details"),
-        backgroundColor: Colors.amberAccent,
+        title: Text(
+            data == null ? "Recipe" : data["title"].toString(),
+            style: TextStyle(
+                color: Colors.amberAccent)
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.account_circle),
+            color: Colors.amberAccent,
+            tooltip: data == null ? "Recipe" : data["title"].toString(),
+            onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+          ),
+        ],
       ),
       body: new Column(
         children: <Widget>[
@@ -84,24 +99,43 @@ class RecipeDetailsState extends State<RecipeDetails> {
                           child: Container(
                             child: Column(
                               children: <Widget>[
-                                Text("Name: "),
-                                Text(data["title"].toString() + "\n",
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
-                                Text("Cooking Time: "),
-                                Text(data["readyInMinutes"].toString() + " minutes\n",
-                                    style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
                                 Image.network(
                                   data["image"],
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.favorite),
-                                  color: Colors.amberAccent,
-                                  tooltip: 'Save Recipe',
-                                  onPressed: () => writeCounter(data["title"].toString(), data["image"].toString(), data["id"].toString()),
+                                Text("\n"),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Icon(Icons.timer, color: Colors.green[500]),
+                                          Text('Cook:'),
+                                          Text(data["readyInMinutes"].toString()),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Image.network("https://lh6.googleusercontent.com/WA7C9Cpf-bKthQeYzeVLPzPNbhIpKd_gbRZ8GiCreDZlgBE0PUO0d3SUi_I8LnlYvCzdCnr2dIXiSLJT7CvE=w1840-h917", color: Colors.green[500], width: 25),
+                                          Text('Serves:'),
+                                          Text(data["servings"].toString()),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          IconButton(
+                                            icon: Icon(Icons.favorite),
+                                            color: Colors.amberAccent,
+                                            tooltip: 'Save Recipe',
+                                            onPressed: () => writeCounter(data["title"].toString(), data["image"].toString(), data["id"].toString()),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text("Ingredients: \n"),
+
+                                Text("\n" + "Ingredients: \n"),
                                 Container(
                                   height: data["extendedIngredients"].length * 25.0,
                                   child: ListView.builder(
