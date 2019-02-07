@@ -97,13 +97,15 @@ class RecipeDetailsState extends State<RecipeDetails> {
                       children: <Widget>[
                         Card(
                           child: Container(
+                            margin: const EdgeInsets.only(left: 4.0, right: 4.0),
                             child: Column(
                               children: <Widget>[
                                 Image.network(
                                   data["image"],
                                 ),
-                                Text("\n"),
+                                //Text("\n"),
                                 Container(
+                                  margin: const EdgeInsets.only(top: 12.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -134,9 +136,16 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                     ],
                                   ),
                                 ),
-
-                                Text("\n" + "Ingredients: \n"),
                                 Container(
+                                  margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+                                  height: 1.5,
+                                  color: Colors.grey,
+                                ),
+                                Text("\n" + "Ingredients: \n",
+                                    style: TextStyle(
+                                        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 6.0, right: 6.0),
                                   height: data["extendedIngredients"].length * 25.0,
                                   child: ListView.builder(
                                     shrinkWrap: true,
@@ -145,19 +154,28 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                       return new Container(
                                         child: Column(
                                           children: <Widget>[
-                                            Text(data["extendedIngredients"][index]["original"],
-                                                style: TextStyle(
-                                                    fontSize: 18.0, color: Colors.black87)),
+                                            Row(
+                                              children: <Widget>[
+                                                Text((index+1).toString() + ". ",
+                                                    style: TextStyle(
+                                                        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
+                                                Text(data["extendedIngredients"][index]["original"],
+                                                    style: TextStyle(
+                                                        fontSize: 14.0, color: Colors.black87)),
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       );
                                     },
                                   ),
                                 ),
-                                Text("\n" + "Intructions: "),
+                                Text("Intructions: \n",
+                                  style: TextStyle(
+                                      fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
                                 Text(data["instructions"].toString().replaceAll("  ", "\n"),
                                     style: TextStyle(
-                                        fontSize: 18.0, color: Colors.black87)),
+                                        fontSize: 16.0, color: Colors.black87)),
                               ],
                             ),
                           ),

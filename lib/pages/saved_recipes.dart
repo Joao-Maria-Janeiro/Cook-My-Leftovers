@@ -74,7 +74,6 @@ class SavedRecipesStageState extends State<SavedRecipesStage> {
                         onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: int.parse((contents[index]).split("||")[2])))),
                         child: Column(
                           children: <Widget>[
-                            Text("Name: "),
                             Text((contents[index]).split("||")[0],
                                 style: TextStyle(
                                     fontSize: 18.0, color: Colors.black87)),
