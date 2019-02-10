@@ -70,6 +70,7 @@ class RecipesStageState extends State<RecipesStage> {
           itemCount: filtered == null ? 0 : filtered.length,
           itemBuilder: (BuildContext context, int index){
             return new Container(
+              height: 200,
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,8 +85,10 @@ class RecipesStageState extends State<RecipesStage> {
                           onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
                           child: Container(
                             decoration: new BoxDecoration(
-                              image: new DecorationImage(image: new NetworkImage(filtered[index]["image"]),
-                                fit: BoxFit.cover,),
+                              image: new DecorationImage(
+                                image: new NetworkImage(filtered[index]["image"]),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             child: new Container(
                               margin: const EdgeInsets.only(top: 8.0, left: 10.0),
