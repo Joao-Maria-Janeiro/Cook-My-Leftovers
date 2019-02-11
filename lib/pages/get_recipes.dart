@@ -75,11 +75,13 @@ class RecipesStageState extends State<RecipesStage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Card(
+                    new Expanded(
+                    child: Card(
+                      margin: const EdgeInsets.all(0.0),
                       child: Container(
                         margin: const EdgeInsets.only(left: 4.0, right: 4.0),
                         constraints: new BoxConstraints.expand(
-                          height: 200.0,
+                          height: 192.0,
                         ),
                         child: new InkWell(
                           onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
@@ -87,7 +89,7 @@ class RecipesStageState extends State<RecipesStage> {
                             decoration: new BoxDecoration(
                               image: new DecorationImage(
                                 image: new NetworkImage(filtered[index]["image"]),
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fill,
                               ),
                             ),
                             child: new Container(
@@ -99,9 +101,9 @@ class RecipesStageState extends State<RecipesStage> {
                                     fontWeight: FontWeight.bold,)),
                             ),
                           ),
-
                         ),
                       ),
+                    ),
                     ),
                   ],
                 ),
