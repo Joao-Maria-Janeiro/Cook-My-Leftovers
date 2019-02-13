@@ -163,6 +163,7 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                     controller: controller,
                                     children: <Widget>[
                                       ListView.builder(
+                                        physics: const NeverScrollableScrollPhysics(),
                                         shrinkWrap: true,
                                         itemCount: data["extendedIngredients"] == null ? 0 : data["extendedIngredients"].length,
                                         itemBuilder: (BuildContext context, int index){
