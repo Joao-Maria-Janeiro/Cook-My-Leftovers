@@ -78,101 +78,141 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: mainKey,
-      appBar: AppBar(
-        title: Text(
-            widget.title,
-            style: TextStyle(
-                color: Colors.amberAccent)
-        ),
-        leading: new IconButton(
-          icon: Icon(Icons.account_circle),
-          color: primaryColor,
-          tooltip: 'Your saved recipes',
-          onPressed: () =>
-              Navigator.of(context).push(new MaterialPageRoute(builder: (
-                  BuildContext context) => new SavedRecipesStage())),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            color: primaryColor,
-            onPressed: () =>
-                Navigator.of(context).push(new MaterialPageRoute(builder: (
-                    BuildContext context) => new Search())),
-          ),
-        ],
-      ),
       body: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(0.0),
         child: Container(
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text("Chef Suggestions",
-                  style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700)
+              Container(
+                height: 180,
+                decoration: new BoxDecoration(
+                    image: new DecorationImage(
+                      image: new NetworkImage("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg"),
+                      fit: BoxFit.cover,
+                    ),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)
+                  ),
+                  gradient: new LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blue,
+                      Colors.lightBlueAccent,
+                    ]
+                  ),
+                    boxShadow: [
+                      new BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 10.0,
+                      )
+                    ]
+                ),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.account_circle),
+                        iconSize: 40,
+                        color: primaryColor,
+                        tooltip: 'Your saved recipes',
+                        onPressed: () =>
+                            Navigator.of(context).push(new MaterialPageRoute(builder: (
+                                BuildContext context) => new SavedRecipesStage())),
+                      ),
+                      Text(
+                          widget.title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: Colors.amberAccent)
+                      ),
+                      //flexibleSpace: Image.network("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg",),
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          iconSize: 40,
+                          color: primaryColor,
+                          onPressed: () =>
+                              Navigator.of(context).push(new MaterialPageRoute(builder: (
+                                  BuildContext context) => new Search())),
+                        )
+                  ],
+                )
               ),
               Container(
-                height: 150.0,
-                width: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: data == null ? 0 : data.length,
-                  itemBuilder: (BuildContext context, int index){
-                    return new Container(
-                      height: 100,
-                      width: 200,
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                            new Expanded(
-                              child: Card(
-                                //margin: const EdgeInsets.all(0.0),
-                                elevation: 12,
-                                margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(22.0),
-                                ),
-                                child: Container(
-                                  margin: const EdgeInsets.all(0.0),
-                                  constraints: new BoxConstraints.expand(
-                                    height: 192.0,
+                padding: const EdgeInsets.all(22.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                Text("Chef Suggestions",
+                    style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700)
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top:16.0, bottom: 4.0),
+                  height: 200.0,
+                  width: 250,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: data == null ? 0 : data.length,
+                    itemBuilder: (BuildContext context, int index){
+                      return new Container(
+                        height: 200,
+                        width: 250,
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              new Expanded(
+                                child: Card(
+                                  //margin: const EdgeInsets.all(0.0),
+                                  elevation: 2,
+                                  margin: const EdgeInsets.only(left: 8.0, right: 8.0, top: 6.0, bottom: 6.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(22.0),
                                   ),
-                                  child: new InkWell(
-                                    onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: data[index]["id"]))),
-                                    child: Container(
-                                      decoration: new BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(22.0)),
-                                        image: new DecorationImage(
-                                          image: new NetworkImage(data[index]["image"]),
-                                          fit: BoxFit.fitWidth,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(0.0),
+                                    constraints: new BoxConstraints.expand(
+                                      height: 200,
+                                    ),
+                                    child: new InkWell(
+                                      onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: data[index]["id"]))),
+                                      child: Container(
+                                        decoration: new BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(22.0)),
+                                          image: new DecorationImage(
+                                            image: new NetworkImage(data[index]["image"]),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      child: new Container(
-                                        margin: const EdgeInsets.only(top: 8.0, left: 10.0),
-                                        child: new Text(data[index]["title"],
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,)),
+                                        child: new Container(
+                                          margin: const EdgeInsets.only(top: 8.0, left: 10.0),
+                                          child: new Text(data[index]["title"],
+                                              style: TextStyle(
+                                                fontSize: 20.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,)),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
+                ),
+                  ],
                 ),
               ),
+
             ],
           ),
         ),
