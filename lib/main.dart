@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   margin: const EdgeInsets.only(top:16.0, bottom: 4.0),
                   height: 200.0,
-                  width: 250,
+                  width: MediaQuery.of(context).size.width,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
