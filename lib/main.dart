@@ -49,11 +49,15 @@ class _MyHomePageState extends State<MyHomePage> {
   List data;
   bool _waiting = true;
   List suggestions = new List();
+  String trivia;
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
+    var foodTrivia = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/trivia/random"), headers: {"X-RapidAPI-Key": keys.key});
     setState(() {
       var resBody = json.decode(res.body);
+      var resTrivia = json.decode(foodTrivia.body);
+      trivia = resTrivia.toString();
       data = resBody;
       getTheSuggestions();
     });
@@ -216,6 +220,30 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       );
                     },
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 28),
+                  padding: const EdgeInsets.all(12),
+                  decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      gradient: new LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Colors.green,
+                            Colors.lightGreen,
+                          ]
+                      ),
+                      boxShadow: [
+                        new BoxShadow(
+                          color: Colors.black54,
+                          blurRadius: 6.0,
+                        )
+                      ]
+                  ),
+                  child: Text(trivia,
+                      style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white)
                   ),
                 ),
                   ],
