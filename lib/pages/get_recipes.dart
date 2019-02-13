@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'recipe_details.dart';
 import '../keys.dart' as keys;
+import 'package:cook_my_leftovers/pages/saved_recipes.dart';
+
 
 final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
 final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
@@ -63,8 +65,24 @@ class RecipesStageState extends State<RecipesStage> {
   Widget build(BuildContext context) {
     if(filtered.length != 0){
       return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Recipes"),
+        backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
+        appBar: AppBar(
+          title: Text(
+              "Recipes",
+              style: TextStyle(
+                  color: Colors.amberAccent)
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              color: primaryColor,
+              tooltip: 'Your saved recipes',
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+            ),
+          ],
         ),
         body: ListView.builder(
           itemCount: filtered == null ? 0 : filtered.length,
@@ -79,7 +97,7 @@ class RecipesStageState extends State<RecipesStage> {
                     child: Card(
                       margin: const EdgeInsets.all(0.0),
                       child: Container(
-                        margin: const EdgeInsets.only(left: 4.0, right: 4.0),
+                        margin: const EdgeInsets.all(0.0),
                         constraints: new BoxConstraints.expand(
                           height: 192.0,
                         ),
@@ -89,7 +107,7 @@ class RecipesStageState extends State<RecipesStage> {
                             decoration: new BoxDecoration(
                               image: new DecorationImage(
                                 image: new NetworkImage(filtered[index]["image"]),
-                                fit: BoxFit.fill,
+                                fit: BoxFit.fitWidth,
                               ),
                             ),
                             child: new Container(

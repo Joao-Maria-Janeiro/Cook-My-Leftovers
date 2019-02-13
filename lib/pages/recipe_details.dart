@@ -159,7 +159,7 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                                 Text((index+1).toString() + ". ",
                                                     style: TextStyle(
                                                         fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
-                                                Text(data["extendedIngredients"][index]["original"],
+                                                Text(data["extendedIngredients"][index]["amount"] + data["extendedIngredients"][index]["unit"] + data["extendedIngredients"][index]["name"],
                                                     style: TextStyle(
                                                         fontSize: 14.0, color: Colors.black87)),
                                               ],
