@@ -148,6 +148,8 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                 Container(
                                   height: 50.0,
                                   child: TabBar(
+                                    indicatorColor: Colors.amberAccent,
+                                    labelColor: Colors.grey,
                                     controller: controller,
                                     tabs: <Tab>[
                                       new Tab(text: "Ingredients"),
@@ -160,28 +162,28 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                   child: TabBarView(
                                     controller: controller,
                                     children: <Widget>[
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: data["extendedIngredients"] == null ? 0 : data["extendedIngredients"].length,
-                                    itemBuilder: (BuildContext context, int index){
-                                      return new Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Row(
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: data["extendedIngredients"] == null ? 0 : data["extendedIngredients"].length,
+                                        itemBuilder: (BuildContext context, int index){
+                                          return new Container(
+                                            child: Column(
                                               children: <Widget>[
-                                                Text((index+1).toString() + ". ",
-                                                    style: TextStyle(
-                                                        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
-                                                Text((data["extendedIngredients"][index]["amount"]).toString() + " " + (data["extendedIngredients"][index]["unit"]).toString() + " " + data["extendedIngredients"][index]["name"],
-                                                    style: TextStyle(
-                                                        fontSize: 14.0, color: Colors.black87)),
+                                                Row(
+                                                  children: <Widget>[
+                                                    Text((index+1).toString() + ". ",
+                                                        style: TextStyle(
+                                                            fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
+                                                    Text((data["extendedIngredients"][index]["amount"]).toString() + " " + (data["extendedIngredients"][index]["unit"]).toString() + " " + data["extendedIngredients"][index]["name"],
+                                                        style: TextStyle(
+                                                            fontSize: 14.0, color: Colors.black87)),
+                                                  ],
+                                                ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                          );
+                                        },
+                                      ),
                                       Text(data["instructions"].toString().replaceAll("  ", "\n"),
                                           style: TextStyle(
                                               fontSize: 16.0, color: Colors.black87)),
