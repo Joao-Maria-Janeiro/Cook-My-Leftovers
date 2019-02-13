@@ -158,6 +158,7 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                   ),
                                 ),
                                 Container(
+                                  margin: const EdgeInsets.only(left: 8.0, top: 10.0),
                                   height: 900.0,
                                   child: TabBarView(
                                     controller: controller,
