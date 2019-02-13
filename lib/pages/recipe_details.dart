@@ -17,8 +17,10 @@ class RecipeDetails extends StatefulWidget {
   RecipeDetailsState createState() => RecipeDetailsState();
 }
 
-class RecipeDetailsState extends State<RecipeDetails> {
+class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderStateMixin {
   Map data;
+  TabController controller;
+
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + (widget.id).toString() + "/information"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -54,12 +56,14 @@ class RecipeDetailsState extends State<RecipeDetails> {
   @override
   void initState() {
     super.initState();
+    controller = new TabController(vsync: this, length: 2);
     getData();
   }
 
   @override
   void dispose() {
     super.dispose();
+    controller.dispose();
   }
 
   @override
@@ -141,41 +145,25 @@ class RecipeDetailsState extends State<RecipeDetails> {
                                   height: 1.5,
                                   color: Colors.grey,
                                 ),
-                                Text("\n" + "Ingredients: \n",
-                                    style: TextStyle(
-                                        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
                                 Container(
-                                  margin: const EdgeInsets.only(left: 6.0, right: 6.0),
-                                  height: data["extendedIngredients"].length * 25.0,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: data["extendedIngredients"] == null ? 0 : data["extendedIngredients"].length,
-                                    itemBuilder: (BuildContext context, int index){
-                                      return new Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Text((index+1).toString() + ". ",
-                                                    style: TextStyle(
-                                                        fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
-                                                Text(data["extendedIngredients"][index]["amount"] + data["extendedIngredients"][index]["unit"] + data["extendedIngredients"][index]["name"],
-                                                    style: TextStyle(
-                                                        fontSize: 14.0, color: Colors.black87)),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                  child: TabBar(
+                                    controller: controller,
+                                    tabs: <Tab>[
+                                      new Tab(text: "Ingredients"),
+                                      new Tab(text: "Instructions"),
+                                    ],
                                   ),
                                 ),
-                                Text("Intructions: \n",
-                                  style: TextStyle(
-                                      fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
-                                Text(data["instructions"].toString().replaceAll("  ", "\n"),
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: Colors.black87)),
+                                Container(
+                                  child: TabBarView(
+                                    controller: controller,
+                                    children: <Widget>[
+                                      Text(data["instructions"].toString().replaceAll("  ", "\n"),
+                                          style: TextStyle(
+                                              fontSize: 16.0, color: Colors.black87)),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
