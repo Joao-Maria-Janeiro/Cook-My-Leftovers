@@ -76,12 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void getTheSuggestions(){
     for (var i = 0; i < 5; i++){
-      var rng = new Random();
-      var idx = rng.nextInt(data.length);
+      var idx;
       do{
         var rng = new Random();
-        var idx = rng.nextInt(data.length);
+        idx = rng.nextInt(data.length);
       }while(seen.contains(idx));
+      seen.add(idx);
       suggestions.add(data[idx]);
     }
   }
