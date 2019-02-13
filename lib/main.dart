@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import './pages/get_recipes.dart';
 import './pages/saved_recipes.dart';
 import 'dart:async';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'keys.dart' as keys;
@@ -47,18 +48,26 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List data;
   bool _waiting = true;
+  List suggestions = new List();
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
     setState(() {
       var resBody = json.decode(res.body);
       data = resBody;
-      print(data);
+      getTheSuggestions();
     });
 
     return "SUCCESS";
   }
 
+  void getTheSuggestions(){
+    for (var i = 0; i < 5; i++){
+      var rng = new Random();
+      var idx = rng.nextInt(data.length);
+      suggestions.add(data[idx]);
+    }
+  }
 
   @override
   void initState() {
@@ -157,7 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
-                    itemCount: data == null ? 0 : data.length,
+                    itemCount: suggestions == null ? 0 : suggestions.length,
                     itemBuilder: (BuildContext context, int index){
                       return new Container(
                         height: 200,
@@ -180,18 +189,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                       height: 200,
                                     ),
                                     child: new InkWell(
-                                      onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: data[index]["id"]))),
+                                      onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: suggestions[index]["id"]))),
                                       child: Container(
                                         decoration: new BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(22.0)),
                                           image: new DecorationImage(
-                                            image: new NetworkImage(data[index]["image"]),
+                                            image: new NetworkImage(suggestions[index]["image"]),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
                                         child: new Container(
                                           margin: const EdgeInsets.only(top: 8.0, left: 10.0),
-                                          child: new Text(data[index]["title"],
+                                          child: new Text(suggestions[index]["title"],
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 color: Colors.white,
