@@ -1,7 +1,14 @@
+import 'package:cook_my_leftovers/pages/recipe_details.dart';
+import 'package:cook_my_leftovers/pages/search_ingredients.dart';
 import 'package:cook_my_leftovers/swipe_feed_page.dart';
 import 'package:flutter/material.dart';
 import './pages/get_recipes.dart';
 import './pages/saved_recipes.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'keys.dart' as keys;
+import 'package:cook_my_leftovers/pages/saved_recipes.dart';
 
 String result = "";
 int _count = 1;
@@ -12,6 +19,8 @@ final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -21,7 +30,7 @@ class MyApp extends StatelessWidget {
         cursorColor: primaryColor,
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'What ingredients do you have?'),
+      home: MyHomePage(title: 'Cook My Leftovers'),
     );
   }
 }
@@ -36,17 +45,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List data;
+  bool _waiting = true;
 
+  Future<String> getData() async {
+    var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
+    setState(() {
+      var resBody = json.decode(res.body);
+      data = resBody;
+      print(data);
+    });
+
+    return "SUCCESS";
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   final formKey = GlobalKey<FormState>();
   final mainKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _ingredients = new List.generate(_count, (int i) => new IngredientColumn());
-    if(_count == 0){
-      _count++;
-    }
     return Scaffold(
       key: mainKey,
       appBar: AppBar(
@@ -55,115 +84,100 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(
                 color: Colors.amberAccent)
         ),
+        leading: new IconButton(
+          icon: Icon(Icons.account_circle),
+          color: primaryColor,
+          tooltip: 'Your saved recipes',
+          onPressed: () =>
+              Navigator.of(context).push(new MaterialPageRoute(builder: (
+                  BuildContext context) => new SavedRecipesStage())),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.search),
             color: primaryColor,
-            tooltip: 'Your saved recipes',
-            onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+            onPressed: () =>
+                Navigator.of(context).push(new MaterialPageRoute(builder: (
+                    BuildContext context) => new Search())),
           ),
         ],
       ),
       body: Padding(
-          padding: EdgeInsets.all(10.0),
-          child:  Form(
-            key: formKey,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  flex: 7,
-                  child: new Container(
-                    //height: 200.0,
-                    child: new ListView(
-                      children: _ingredients,
-                      scrollDirection: Axis.vertical,
-                    ),
-                  ),
+        padding: EdgeInsets.all(10.0),
+        child: Container(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text("Chef Suggestions",
+                  style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700)
+              ),
+              Container(
+                height: 150.0,
+                width: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: data == null ? 0 : data.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return new Container(
+                      height: 100,
+                      width: 200,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            new Expanded(
+                              child: Card(
+                                //margin: const EdgeInsets.all(0.0),
+                                elevation: 12,
+                                margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(22.0),
+                                ),
+                                child: Container(
+                                  margin: const EdgeInsets.all(0.0),
+                                  constraints: new BoxConstraints.expand(
+                                    height: 192.0,
+                                  ),
+                                  child: new InkWell(
+                                    onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: data[index]["id"]))),
+                                    child: Container(
+                                      decoration: new BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(22.0)),
+                                        image: new DecorationImage(
+                                          image: new NetworkImage(data[index]["image"]),
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                      child: new Container(
+                                        margin: const EdgeInsets.only(top: 8.0, left: 10.0),
+                                        child: new Text(data[index]["title"],
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                new FlatButton(
-                  onPressed: _addNewIngredientColumn,
-                  child: new Icon(Icons.add),
-                ),
-                RaisedButton(
-                  onPressed: onPressed,
-                  color: primaryColor,
-                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4.0)),
-                  elevation: 6.0,
-                  child: new Text("Check For Recipes"),
-                ),
-              ],
-            ),
-          )
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  void onPressed() {
-    var form = formKey.currentState;
-
-    if (form.validate()) {
-      form.save();
-      setState(() {
-      });
-
-      result = result.substring(1, result.length);
-
-      String buff = result;
-
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipesStage(ingredients: buff)));
-
-      result = "";
-      _count = 0;
-    }
-  }
-
-
-
-  void _addNewIngredientColumn() {
-    setState(() {
-      _count = _count + 1;
-    });
-  }
 }
-
-class IngredientColumn extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => new _IngredientColumn();
-}
-
-class _IngredientColumn extends State<IngredientColumn> {
-  FocusNode nodeTwo = FocusNode();
-
-  @override
-  Widget build(BuildContext context) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    FocusScope.of(context).requestFocus(nodeTwo);
-    return new Container(
-        width: 170.0,
-        padding: new EdgeInsets.all(5.0),
-        child: new Column(children: <Widget>[
-          TextFormField(
-            focusNode: nodeTwo,
-            autocorrect: false,
-            decoration: InputDecoration(
-                labelText: "Ingredient:",
-                labelStyle: new TextStyle(
-                    color: primaryColor
-                ),
-                hintText: "Write you ingredient here",
-                border: new OutlineInputBorder(
-                  borderSide: new BorderSide(width: 1.0, color: Colors.white),
-                )
-            ),
-            onSaved: (str) => result += "," + str,
-          ),
-        ])
-    );
-  }
-
-}
-
-
