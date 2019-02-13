@@ -179,7 +179,7 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                               children: <Widget>[
                                                 Row(
                                                   children: <Widget>[
-                                                    Text((index+1).toString() + ". ",
+                                                    Text("• ",
                                                         style: TextStyle(
                                                             fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black87)),
                                                     Text((data["extendedIngredients"][index]["amount"]).toString() + " " + (data["extendedIngredients"][index]["unit"]).toString() + " " + data["extendedIngredients"][index]["name"],

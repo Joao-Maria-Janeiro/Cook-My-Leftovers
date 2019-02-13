@@ -65,6 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return "SUCCESS";
   }
 
+  Future<String>getTrivia() async{
+    var foodTrivia = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/trivia/random"), headers: {"X-RapidAPI-Key": keys.key});
+    setState(() {
+      var resTrivia = json.decode(foodTrivia.body);
+      trivia = resTrivia["text"];
+    });
+    return "SUCCESS";
+  }
+
   void getTheSuggestions(){
     for (var i = 0; i < 5; i++){
       var rng = new Random();
@@ -130,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       IconButton(
                         icon: Icon(Icons.account_circle),
                         iconSize: 40,
-                        color: primaryColor,
+                        color: Colors.amberAccent,
                         tooltip: 'Your saved recipes',
                         onPressed: () =>
                             Navigator.of(context).push(new MaterialPageRoute(builder: (
@@ -147,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         IconButton(
                           icon: Icon(Icons.search),
                           iconSize: 40,
-                          color: primaryColor,
+                          color: Colors.amberAccent,
                           onPressed: () =>
                               Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SearchPage())),
                         )
@@ -242,8 +251,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                       ]
                   ),
-                  child: Text(trivia == null ? "Loading..." : trivia ,
-                      style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white)
+                  child: InkWell(
+                    onTap: () => getTrivia(),
+                    child: Text(trivia == null ? "Loading..." : trivia ,
+                        style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white)
+                    ),
                   ),
                 ),
                   ],
