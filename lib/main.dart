@@ -105,10 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       image: new NetworkImage("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg"),
                       fit: BoxFit.cover,
                     ),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0)
-                  ),
+
                   gradient: new LinearGradient(
                     begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight,
