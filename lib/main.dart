@@ -1,6 +1,5 @@
 import 'package:cook_my_leftovers/pages/recipe_details.dart';
 import 'package:cook_my_leftovers/pages/search_ingredients.dart';
-import 'package:cook_my_leftovers/swipe_feed_page.dart';
 import 'package:flutter/material.dart';
 import './pages/get_recipes.dart';
 import './pages/saved_recipes.dart';
@@ -49,11 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List data;
   bool _waiting = true;
   List suggestions = new List();
-<<<<<<< HEAD
   String trivia;
-=======
   List seen = new List();
->>>>>>> e4d8062317f193510419328f2de4a893281a9d72
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -61,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       var resBody = json.decode(res.body);
       var resTrivia = json.decode(foodTrivia.body);
-      trivia = resTrivia.toString();
+      trivia = resTrivia["text"];
       data = resBody;
       getTheSuggestions();
     });
@@ -153,8 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           iconSize: 40,
                           color: primaryColor,
                           onPressed: () =>
-                              Navigator.of(context).push(new MaterialPageRoute(builder: (
-                                  BuildContext context) => new Search())),
+                              Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SearchPage())),
                         )
                   ],
                 )
@@ -247,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                       ]
                   ),
-                  child: Text(trivia,
+                  child: Text(trivia == null ? "Loading..." : trivia ,
                       style: new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700, color: Colors.white)
                   ),
                 ),

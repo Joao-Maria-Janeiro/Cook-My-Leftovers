@@ -1,4 +1,3 @@
-import 'package:cook_my_leftovers/swipe_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'get_recipes.dart';
 import 'saved_recipes.dart';
@@ -10,31 +9,15 @@ final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
 final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
 
 
-class Search extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        cursorColor: primaryColor,
-        primarySwatch: Colors.blue,
-      ),
-      home: SearchPage(title: 'What ingredients do you have?'),
-    );
-  }
-}
-
 class SearchPage extends StatefulWidget {
-  SearchPage({Key key, this.title}) : super(key: key);
+  SearchPage({Key key}) : super(key: key);
 
-  final String title;
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  SearchPageState createState() => SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
 
 
   final formKey = GlobalKey<FormState>();
@@ -50,7 +33,7 @@ class _SearchPageState extends State<SearchPage> {
       key: mainKey,
       appBar: AppBar(
         title: Text(
-            widget.title,
+            "What ingredients do you have?",
             style: TextStyle(
                 color: Colors.amberAccent)
         ),
