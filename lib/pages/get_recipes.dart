@@ -94,35 +94,40 @@ class RecipesStageState extends State<RecipesStage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     new Expanded(
-                    child: Card(
-                      margin: const EdgeInsets.all(0.0),
-                      child: Container(
-                        margin: const EdgeInsets.all(0.0),
-                        constraints: new BoxConstraints.expand(
-                          height: 192.0,
+                      child: Card(
+                        //margin: const EdgeInsets.all(0.0),
+                        elevation: 12,
+                        margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22.0),
                         ),
-                        child: new InkWell(
-                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
-                          child: Container(
-                            decoration: new BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                              image: new DecorationImage(
-                                image: new NetworkImage(filtered[index]["image"]),
-                                fit: BoxFit.fitWidth,
+                        child: Container(
+                          margin: const EdgeInsets.all(0.0),
+                          constraints: new BoxConstraints.expand(
+                            height: 192.0,
+                          ),
+                          child: new InkWell(
+                            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(22.0)),
+                                image: new DecorationImage(
+                                  image: new NetworkImage(filtered[index]["image"]),
+                                  fit: BoxFit.fitWidth,
+                                ),
                               ),
-                            ),
-                            child: new Container(
-                              margin: const EdgeInsets.only(top: 8.0, left: 10.0),
-                              child: new Text(filtered[index]["title"],
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,)),
+                              child: new Container(
+                                margin: const EdgeInsets.only(top: 8.0, left: 10.0),
+                                child: new Text(filtered[index]["title"],
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,)),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
                     ),
                   ],
                 ),
