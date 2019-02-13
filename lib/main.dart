@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List data;
   bool _waiting = true;
   List suggestions = new List();
+  List seen = new List();
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -65,6 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var i = 0; i < 5; i++){
       var rng = new Random();
       var idx = rng.nextInt(data.length);
+      do{
+        var rng = new Random();
+        var idx = rng.nextInt(data.length);
+      }while(seen.contains(idx));
       suggestions.add(data[idx]);
     }
   }
