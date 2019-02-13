@@ -105,6 +105,7 @@ class RecipesStageState extends State<RecipesStage> {
                           onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
                           child: Container(
                             decoration: new BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(30.0)),
                               image: new DecorationImage(
                                 image: new NetworkImage(filtered[index]["image"]),
                                 fit: BoxFit.fitWidth,

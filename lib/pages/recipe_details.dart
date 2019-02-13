@@ -115,14 +115,14 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                     children: [
                                       Column(
                                         children: [
-                                          Icon(Icons.timer, color: Colors.green[500]),
+                                          Icon(Icons.timer, color: Colors.amberAccent),
                                           Text('Cook:'),
                                           Text(data["readyInMinutes"].toString()),
                                         ],
                                       ),
                                       Column(
                                         children: [
-                                          Image.network("https://lh6.googleusercontent.com/WA7C9Cpf-bKthQeYzeVLPzPNbhIpKd_gbRZ8GiCreDZlgBE0PUO0d3SUi_I8LnlYvCzdCnr2dIXiSLJT7CvE=w1840-h917", color: Colors.green[500], width: 25),
+                                          Image.network("https://www.pngrepo.com/png/166098/170/serving.png", color: Colors.amberAccent, width: 25),
                                           Text('Serves:'),
                                           Text(data["servings"].toString()),
                                         ],
