@@ -53,6 +53,12 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
     return file.writeAsString(recipeName + "||" + imageUrl + "||" + id + "\n", mode: FileMode.append);
   }
 
+  void saveRecipe({BuildContext context}){
+    writeCounter(data["title"].toString(), data["image"].toString(), data["id"].toString());
+    final snackbar = new SnackBar(content: new Text(data["title"].toString() + " was saved to your favourites"));
+    Scaffold.of(context).showSnackBar(snackbar);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -133,7 +139,7 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                             icon: Icon(Icons.favorite),
                                             color: Colors.amberAccent,
                                             tooltip: 'Save Recipe',
-                                            onPressed: () => writeCounter(data["title"].toString(), data["image"].toString(), data["id"].toString()),
+                                            onPressed: () => saveRecipe(context: context),
                                           ),
                                         ],
                                       ),

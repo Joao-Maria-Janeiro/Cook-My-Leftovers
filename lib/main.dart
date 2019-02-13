@@ -49,7 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   List data;
   bool _waiting = true;
   List suggestions = new List();
+<<<<<<< HEAD
   String trivia;
+=======
+  List seen = new List();
+>>>>>>> e4d8062317f193510419328f2de4a893281a9d72
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -69,6 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var i = 0; i < 5; i++){
       var rng = new Random();
       var idx = rng.nextInt(data.length);
+      do{
+        var rng = new Random();
+        var idx = rng.nextInt(data.length);
+      }while(seen.contains(idx));
       suggestions.add(data[idx]);
     }
   }
@@ -104,10 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       image: new NetworkImage("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg"),
                       fit: BoxFit.cover,
                     ),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0)
-                  ),
+
                   gradient: new LinearGradient(
                     begin: Alignment.bottomLeft,
                     end: Alignment.bottomRight,
