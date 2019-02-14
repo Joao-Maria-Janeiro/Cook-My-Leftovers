@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'keys.dart' as keys;
 import 'package:cook_my_leftovers/pages/saved_recipes.dart';
+import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 
 String result = "";
 int _count = 1;
@@ -51,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
   String trivia;
   List seen = new List();
 
+  GlobalKey _fabKey = GlobalObjectKey("fab");
+  GlobalKey _tileKey = GlobalObjectKey("tile_2");
+
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
     var foodTrivia = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/trivia/random"), headers: {"X-RapidAPI-Key": keys.key});
@@ -61,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       data = resBody;
       getTheSuggestions();
     });
+
 
     return "SUCCESS";
   }
@@ -90,12 +95,68 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getData();
+    Timer(Duration(seconds: 1), () => showCoachMarkFAB());
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+  //Here is example of CoachMark usage
+  void showCoachMarkFAB() {
+    CoachMark coachMarkFAB = CoachMark();
+    RenderBox target = _fabKey.currentContext.findRenderObject();
+
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+        center: markRect.center, radius: markRect.longestSide * 0.6);
+
+    coachMarkFAB.show(
+        targetContext: _fabKey.currentContext,
+        markRect: markRect,
+        children: [
+          Center(
+              child: Text("Tap on Icon to list \nall your ingredients",
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  )))
+        ],
+        duration: null,
+        onClose: () {
+          //Timer(Duration(seconds: 3), () => showCoachMarkTile());
+        });
+  }
+
+  //And here is example of CoachMark usage.
+  //One more example you can see in FriendDetailsPage - showCoachMarkBadges()
+  void showCoachMarkTile() {
+    CoachMark coachMarkTile = CoachMark();
+    RenderBox target = _tileKey.currentContext.findRenderObject();
+
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = markRect.inflate(5.0);
+
+    coachMarkTile.show(
+        targetContext: _fabKey.currentContext,
+        markRect: markRect,
+        markShape: BoxShape.rectangle,
+        children: [
+          Positioned(
+              top: markRect.bottom + 15.0,
+              right: 5.0,
+              child: Text("Tap on friend to see details",
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  )))
+        ],
+        duration: Duration(seconds: 3));
+  }
+
 
   final formKey = GlobalKey<FormState>();
   final mainKey = GlobalKey<ScaffoldState>();
@@ -155,6 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       //flexibleSpace: Image.network("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg",),
                         IconButton(
                           icon: Icon(Icons.search),
+                          key: _fabKey,
                           iconSize: 40,
                           color: Colors.amberAccent,
                           onPressed: () =>

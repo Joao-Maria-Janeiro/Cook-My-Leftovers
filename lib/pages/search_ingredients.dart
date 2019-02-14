@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'get_recipes.dart';
 import 'saved_recipes.dart';
+import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 
 String result = "";
 int _count = 1;
@@ -22,6 +25,41 @@ class SearchPageState extends State<SearchPage> {
 
   final formKey = GlobalKey<FormState>();
   final mainKey = GlobalKey<ScaffoldState>();
+  GlobalKey _addFab = GlobalObjectKey("addFab");
+
+  void showCoachMarkFAB() {
+    CoachMark coachMarkFAB = CoachMark();
+    RenderBox target = _addFab.currentContext.findRenderObject();
+
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+        center: markRect.center, radius: markRect.longestSide * 0.6);
+
+    coachMarkFAB.show(
+        targetContext: _addFab.currentContext,
+        markRect: markRect,
+        children: [
+              Container(
+                margin: EdgeInsets.all(64),
+                  child: Text("Tap on Add to add \none more ingredient",
+                      style: const TextStyle(
+                        fontSize: 24.0,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white,
+                      ))
+              ),
+        ],
+        duration: null,
+        onClose: () {
+          //Timer(Duration(seconds: 3), () => showCoachMarkTile());
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +105,7 @@ class SearchPageState extends State<SearchPage> {
                 ),
                 new FlatButton(
                   onPressed: _addNewIngredientColumn,
+                  key: _addFab,
                   child: new Icon(Icons.add),
                 ),
                 RaisedButton(
