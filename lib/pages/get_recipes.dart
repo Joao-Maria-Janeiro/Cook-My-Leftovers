@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'recipe_details.dart';
 import '../keys.dart' as keys;
+import 'dart:io';
 import 'package:cook_my_leftovers/pages/saved_recipes.dart';
 
 
@@ -27,6 +28,7 @@ class RecipesStageState extends State<RecipesStage> {
   List data;
   List filtered = new List();
   bool _waiting = true;
+  bool _internet = true;
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + widget.ingredients), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -49,10 +51,26 @@ class RecipesStageState extends State<RecipesStage> {
     _waiting = false;
   }
 
+  Future checkState() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          _internet = true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        _internet = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getData();
+    checkState();
   }
 
   @override
@@ -63,81 +81,8 @@ class RecipesStageState extends State<RecipesStage> {
 
   @override
   Widget build(BuildContext context) {
-    if(filtered.length != 0){
-      return new Scaffold(
-        backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
-        appBar: AppBar(
-          title: Text(
-              "Recipes",
-              style: TextStyle(
-                  color: Colors.amberAccent)
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              color: primaryColor,
-              tooltip: 'Your saved recipes',
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
-            ),
-          ],
-        ),
-        body: ListView.builder(
-          itemCount: filtered == null ? 0 : filtered.length,
-          itemBuilder: (BuildContext context, int index){
-            return new Container(
-              height: 200,
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    new Expanded(
-                      child: Card(
-                        //margin: const EdgeInsets.all(0.0),
-                        elevation: 12,
-                        margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0),
-                        ),
-                        child: Container(
-                          margin: const EdgeInsets.all(0.0),
-                          constraints: new BoxConstraints.expand(
-                            height: 192.0,
-                          ),
-                          child: new InkWell(
-                            onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: filtered[index]["id"]))),
-                            child: Container(
-                              decoration: new BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(22.0)),
-                                image: new DecorationImage(
-                                  image: new NetworkImage(filtered[index]["image"]),
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                              child: new Container(
-                                margin: const EdgeInsets.only(top: 8.0, left: 10.0),
-                                child: new Text(filtered[index]["title"],
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    }else{
-      if(_waiting) {
+    if (_internet == true){
+      if (filtered.length != 0) {
         return new Scaffold(
           backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
           appBar: AppBar(
@@ -154,53 +99,159 @@ class RecipesStageState extends State<RecipesStage> {
                 icon: Icon(Icons.account_circle),
                 color: primaryColor,
                 tooltip: 'Your saved recipes',
-                onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+                onPressed: () => Navigator.of(context).push(
+                    new MaterialPageRoute(builder: (
+                        BuildContext context) => new SavedRecipesStage())),
               ),
             ],
           ),
-          body: new Container(
-            child: Center(
-                child: new CircularProgressIndicator(
-                  value: null,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.amberAccent),
-                )
-            ),
+          body: ListView.builder(
+            itemCount: filtered == null ? 0 : filtered.length,
+            itemBuilder: (BuildContext context, int index) {
+              return new Container(
+                height: 200,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      new Expanded(
+                        child: Card(
+                          //margin: const EdgeInsets.all(0.0),
+                          elevation: 12,
+                          margin: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0),
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.all(0.0),
+                            constraints: new BoxConstraints.expand(
+                              height: 192.0,
+                            ),
+                            child: new InkWell(
+                              onTap: () => Navigator.of(context).push(
+                                  new MaterialPageRoute(builder: (
+                                      BuildContext context) =>
+                                  new RecipeDetails(
+                                      id: filtered[index]["id"]))),
+                              child: Container(
+                                decoration: new BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(22.0)),
+                                  image: new DecorationImage(
+                                    image: new NetworkImage(
+                                        filtered[index]["image"]),
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                                child: new Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 8.0, left: 10.0),
+                                  child: new Text(filtered[index]["title"],
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         );
-      }else {
-        return new Scaffold(
-          appBar: new AppBar(
-            title: new Text("Available Recipes"),
-          ),
-          body: new Container(
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Text("No recipes match your ingredients, would you like other recipes with more ingredients? "),
-                  new ButtonTheme.bar(
-                    child: new ButtonBar(
-                      alignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new RaisedButton(
-                          onPressed: () => setState(() { filtered.addAll(data); }),
-                          child: new Text("Yes"),
-                          color: Colors.amberAccent,
-                        ),
-                        new RaisedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: new Text("No"),
-                          color: Colors.amberAccent,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+      } else {
+        if (_waiting) {
+          return new Scaffold(
+            backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
+            appBar: AppBar(
+              title: Text(
+                  "Recipes",
+                  style: TextStyle(
+                      color: Colors.amberAccent)
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.account_circle),
+                  color: primaryColor,
+                  tooltip: 'Your saved recipes',
+                  onPressed: () => Navigator.of(context).push(
+                      new MaterialPageRoute(builder: (
+                          BuildContext context) => new SavedRecipesStage())),
+                ),
+              ],
+            ),
+            body: new Container(
+              child: Center(
+                  child: new CircularProgressIndicator(
+                    value: null,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.amberAccent),
+                  )
               ),
             ),
-          ),
-        );
+          );
+        } else {
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text("Available Recipes"),
+            ),
+            body: new Container(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                        "No recipes match your ingredients, would you like other recipes with more ingredients? "),
+                    new ButtonTheme.bar(
+                      child: new ButtonBar(
+                        alignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new RaisedButton(
+                            onPressed: () =>
+                                setState(() {
+                                  filtered.addAll(data);
+                                }),
+                            child: new Text("Yes"),
+                            color: Colors.amberAccent,
+                          ),
+                          new RaisedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: new Text("No"),
+                            color: Colors.amberAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
       }
-
+    }else{
+      return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("Available Recipes"),
+        ),
+        body: new Container(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text("You have no internet connection"),
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
   }
