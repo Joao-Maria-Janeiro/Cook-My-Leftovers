@@ -10,9 +10,13 @@ import 'dart:convert';
 import 'keys.dart' as keys;
 import 'package:cook_my_leftovers/pages/saved_recipes.dart';
 import 'package:highlighter_coachmark/highlighter_coachmark.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 String result = "";
 int _count = 1;
+bool firstRun = false;
 
 final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
 final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
@@ -47,13 +51,63 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List data;
-  bool _waiting = true;
   List suggestions = new List();
   String trivia;
   List seen = new List();
 
   GlobalKey _fabKey = GlobalObjectKey("fab");
   GlobalKey _tileKey = GlobalObjectKey("tile_2");
+
+  List<String> contents = new List();
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/firstRun.txt');
+  }
+
+  Future<File> writeCounter(String value) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString(value, mode: FileMode.write);
+  }
+
+  Future<bool> readCounter() async {
+    print("Fez1");
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      String contents = await file.readAsString();
+
+      print("HELLO ");
+      print(contents);
+
+      if(contents == '0') {
+        setState(() {
+          firstRun = true;
+        });
+      }else{
+        writeCounter("0");
+        setState(() {
+          firstRun = false;
+        });
+      }
+    } catch (e) {
+      print("HERE " + e.toString());
+      // If we encounter an error, return 0
+      setState(() {
+        firstRun = false;
+      });
+    }
+    return firstRun;
+  }
 
   Future<String> getData() async {
     var res = await http.get(Uri.encodeFull("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=200&ranking=1&ingredients=" + "salt"), headers: {"Accept": "application/json", "X-RapidAPI-Key": keys.key});
@@ -66,7 +120,13 @@ class _MyHomePageState extends State<MyHomePage> {
       getTheSuggestions();
     });
 
-
+    if(await readCounter() == false) {
+      writeCounter("1\n");
+    }
+    await readCounter();
+    if(firstRun == false) {
+      Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+    }
     return "SUCCESS";
   }
 
@@ -91,11 +151,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+
   @override
   void initState() {
     super.initState();
     getData();
-    Timer(Duration(seconds: 1), () => showCoachMarkFAB());
   }
 
   @override

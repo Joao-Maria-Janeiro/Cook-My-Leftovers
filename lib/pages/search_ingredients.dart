@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'get_recipes.dart';
 import 'saved_recipes.dart';
 import 'package:highlighter_coachmark/highlighter_coachmark.dart';
 
 String result = "";
 int _count = 1;
+bool firstRun = false;
 
 final primaryColor = const Color.fromRGBO(250, 163, 0, 80);
 final secondaryColor = const Color.fromRGBO(0, 88, 250, 80);
@@ -18,6 +21,7 @@ class SearchPage extends StatefulWidget {
 
   @override
   SearchPageState createState() => SearchPageState();
+
 }
 
 class SearchPageState extends State<SearchPage> {
@@ -26,6 +30,56 @@ class SearchPageState extends State<SearchPage> {
   final formKey = GlobalKey<FormState>();
   final mainKey = GlobalKey<ScaffoldState>();
   GlobalKey _addFab = GlobalObjectKey("addFab");
+
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/firstRunIng.txt');
+  }
+
+  Future<File> writeCounter(String value) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString(value, mode: FileMode.write);
+  }
+
+  Future<bool> readCounter() async {
+    print("Fez1");
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      String contents = await file.readAsString();
+
+      print("HELLO ");
+      print(contents);
+
+      if(contents == '0') {
+        setState(() {
+          firstRun = true;
+        });
+      }else{
+        writeCounter("0");
+        setState(() {
+          firstRun = false;
+        });
+      }
+    } catch (e) {
+      print("HERE " + e.toString());
+      // If we encounter an error, return 0
+      setState(() {
+        firstRun = false;
+      });
+    }
+    return firstRun;
+  }
 
   void showCoachMarkFAB() {
     CoachMark coachMarkFAB = CoachMark();
@@ -55,10 +109,20 @@ class SearchPageState extends State<SearchPage> {
         });
   }
 
+  void startTutorial() async {
+    if(await readCounter() == false) {
+    writeCounter("1\n");
+    }
+    await readCounter();
+    if(firstRun == false) {
+    Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+    startTutorial();
   }
 
   @override
