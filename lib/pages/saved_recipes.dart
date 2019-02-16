@@ -14,6 +14,8 @@ class SavedRecipesStage extends StatefulWidget {
 class SavedRecipesStageState extends State<SavedRecipesStage> {
 
   List<String> contents = new List();
+  List<String> temp = new List();
+
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -30,14 +32,19 @@ class SavedRecipesStageState extends State<SavedRecipesStage> {
     try {
       final file = await _localFile;
 
+      temp = await file.readAsLines();
+
       // Read the file
-      contents = await file.readAsLines();
+      setState(() {
+        contents = temp;
+      });
 
       print(contents);
 
       return contents;
     } catch (e) {
       // If we encounter an error, return 0
+      print(e);
       return new List();
     }
   }

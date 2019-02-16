@@ -79,15 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<bool> readCounter() async {
-    print("Fez1");
     try {
       final file = await _localFile;
 
       // Read the file
       String contents = await file.readAsString();
 
-      print("HELLO ");
-      print(contents);
 
       if(contents == '0') {
         setState(() {
@@ -100,7 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     } catch (e) {
-      print("HERE " + e.toString());
       // If we encounter an error, return 0
       setState(() {
         firstRun = false;
