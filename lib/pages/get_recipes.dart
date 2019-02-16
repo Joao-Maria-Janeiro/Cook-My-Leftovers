@@ -139,8 +139,24 @@ class RecipesStageState extends State<RecipesStage> {
     }else{
       if(_waiting) {
         return new Scaffold(
-          appBar: new AppBar(
-            title: new Text("Available Recipes"),
+          backgroundColor: new Color.fromRGBO(240, 240, 240, 4),
+          appBar: AppBar(
+            title: Text(
+                "Recipes",
+                style: TextStyle(
+                    color: Colors.amberAccent)
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.account_circle),
+                color: primaryColor,
+                tooltip: 'Your saved recipes',
+                onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SavedRecipesStage())),
+              ),
+            ],
           ),
           body: new Container(
             child: Center(
