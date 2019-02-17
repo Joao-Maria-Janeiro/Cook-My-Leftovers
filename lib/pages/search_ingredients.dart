@@ -51,14 +51,12 @@ class SearchPageState extends State<SearchPage> {
   }
 
   Future<bool> readCounter() async {
-    print("Fez1");
     try {
       final file = await _localFile;
 
       // Read the file
       String contents = await file.readAsString();
 
-      print("HELLO ");
       print(contents);
 
       if(contents == '0') {
@@ -72,8 +70,6 @@ class SearchPageState extends State<SearchPage> {
         });
       }
     } catch (e) {
-      print("HERE " + e.toString());
-      // If we encounter an error, return 0
       setState(() {
         firstRun = false;
       });
@@ -170,14 +166,19 @@ class SearchPageState extends State<SearchPage> {
                 new FlatButton(
                   onPressed: _addNewIngredientColumn,
                   key: _addFab,
-                  child: new Icon(Icons.add),
+                  child: new Icon(Icons.add, size: 32,),
                 ),
                 RaisedButton(
+                  padding: const EdgeInsets.all(12.0),
                   onPressed: onPressed,
                   color: primaryColor,
-                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(4.0)),
-                  elevation: 6.0,
-                  child: new Text("Check For Recipes"),
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(8.0)),
+                  elevation: 2.0,
+                  child: new Text("Check For Recipes",
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,)),
                 ),
               ],
             ),

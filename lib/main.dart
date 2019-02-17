@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     await readCounter();
     if(firstRun == false) {
-      Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+      Timer(Duration(seconds: 1), () => showInstructionalOverlay());
     }
     return "SUCCESS";
   }
@@ -157,6 +157,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+
+  void showInstructionalOverlay() {
+    CoachMark coachMarkFAB = CoachMark();
+    RenderBox target = _fabKey.currentContext.findRenderObject();
+
+    Rect markRect = target.localToGlobal(Offset.zero) & target.size;
+    markRect = Rect.fromCircle(
+      center: markRect.center, radius: markRect.longestSide * 0.0);
+
+    coachMarkFAB.show(
+        targetContext: _fabKey.currentContext,
+        markRect: markRect,
+        children: [
+          Center(
+              child: Text("Hello There!\n\nWe'll teach how to \nuse this app",
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  )))
+        ],
+        duration: null,
+        onClose: () {
+          Timer(Duration(seconds: 1), () => showCoachMarkFAB());
+        });
+
+
   }
 
   //Here is example of CoachMark usage
