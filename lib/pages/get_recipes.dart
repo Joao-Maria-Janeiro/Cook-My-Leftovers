@@ -205,11 +205,24 @@ class RecipesStageState extends State<RecipesStage> {
               title: new Text("Available Recipes"),
             ),
             body: new Container(
+              padding: const EdgeInsets.all(26),
               child: Center(
                 child: Column(
                   children: <Widget>[
+                    Container(
+                      height: 250,
+                      decoration: new BoxDecoration(
+                        image: new DecorationImage(
+                          image: new NetworkImage("https://i.ibb.co/Ttv1fqg/no-results-found.png"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     Text(
-                        "No recipes match your ingredients, would you like other recipes with more ingredients? "),
+                        "No recipes match your ingredients, would you like other recipes with more ingredients? ",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,)),
                     new ButtonTheme.bar(
                       child: new ButtonBar(
                         alignment: MainAxisAlignment.center,
@@ -219,12 +232,18 @@ class RecipesStageState extends State<RecipesStage> {
                                 setState(() {
                                   filtered.addAll(data);
                                 }),
-                            child: new Text("Yes"),
+                            child: new Text("Yes", style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
                             color: Colors.amberAccent,
                           ),
                           new RaisedButton(
                             onPressed: () => Navigator.of(context).pop(),
-                            child: new Text("No"),
+                            child: new Text("No", style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
                             color: Colors.amberAccent,
                           ),
                         ],

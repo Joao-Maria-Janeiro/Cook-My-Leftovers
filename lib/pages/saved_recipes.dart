@@ -71,23 +71,43 @@ class SavedRecipesStageState extends State<SavedRecipesStage> {
         itemCount: contents == null ? 0 : contents.length,
         itemBuilder: (BuildContext context, int index){
           return new Container(
+            height: 200,
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Card(
-                    child: Container(
-                      child: new InkWell(
-                        onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: int.parse((contents[index]).split("||")[2])))),
-                        child: Column(
-                          children: <Widget>[
-                            Text((contents[index]).split("||")[0],
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.black87)),
-                            Image.network(
-                              (contents[index]).split("||")[1],
+                  new Expanded(
+                    child: Card(
+                      //margin: const EdgeInsets.all(0.0),
+                      elevation: 12,
+                      margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 6.0, bottom: 6.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(22.0),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(0.0),
+                        constraints: new BoxConstraints.expand(
+                          height: 192.0,
+                        ),
+                        child: new InkWell(
+                          onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new RecipeDetails(id: int.parse((contents[index]).split("||")[2])))),
+                          child: Container(
+                            decoration: new BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(22.0)),
+                              image: new DecorationImage(
+                                image: new NetworkImage((contents[index]).split("||")[1]),
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
-                          ],
+                            child: new Container(
+                              margin: const EdgeInsets.only(top: 8.0, left: 10.0),
+                              child: new Text((contents[index]).split("||")[0],
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,)),
+                            ),
+                          ),
                         ),
                       ),
                     ),
