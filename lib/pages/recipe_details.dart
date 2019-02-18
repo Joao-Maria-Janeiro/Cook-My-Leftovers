@@ -198,7 +198,7 @@ class RecipeDetailsState extends State<RecipeDetails> with SingleTickerProviderS
                                     ],
                                   ),
                                 ),
-                                Text("Credits by" + data["creditText"].toString(),
+                                Text("Recipe by: " + data["creditText"].toString(),
                                     style: TextStyle(
                                         fontSize: 16.0, color: Colors.black87))
                               ],
