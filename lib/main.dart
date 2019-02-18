@@ -257,10 +257,10 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                height: 180,
+                height: 160,
                 decoration: new BoxDecoration(
                     image: new DecorationImage(
-                      image: new NetworkImage("https://i.ibb.co/nfwbh3F/food-Wall-2.jpg"),
+                      image: new NetworkImage("https://i.ibb.co/ZmtsBjj/appetizer-board-color-326268.jpg"),
                       fit: BoxFit.cover,
                     ),
 
